@@ -1,5 +1,5 @@
 # HƯỚNG DẪN SỬ DỤNG DASHBOARD TRỰC QUAN HÓA SỐ LIỆU KHKT
-**Đề tài:** Nâng cao Năng lực Định hướng Nghề nghiệp cho Học sinh qua Mô hình Trải nghiệm Nghề Tranh Đá Quý Lục Yên
+**Đề tài:** TÁC ĐỘNG CỦA MÔ HÌNH TRẢI NGHIỆM NGHỀ TÍCH HỢP CÔNG NGHỆ SỐ CÙNG NGHỆ NHÂN LÀM TRANH ĐÁ QUÝ ĐẾN NĂNG LỰC ĐỊNH HƯỚNG NGHỀ NGHIỆP CỦA HỌC VIÊN GIÁO DỤC THƯỜNG XUYÊN KHU VỰC LỤC YÊN
 
 ---
 
