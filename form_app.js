@@ -153,20 +153,27 @@ function renderView() {
 
         sec.subsections.forEach((sub, subIdx) => {
             const chartId = `chart_${secIdx}_${subIdx}`;
-            const canvasMinWidth = Math.max(780, sub.questions.length * 145);
+            const isMobile = window.innerWidth < 640;
+            const colWidth = isMobile ? 125 : 145;
+            const canvasMinWidth = Math.max(isMobile ? 320 : 700, sub.questions.length * colWidth);
+            const canvasHeight = isMobile ? 340 : 380;
             
             const card = document.createElement('div');
-            card.className = 'bg-white border border-slate-200 rounded-xl p-5 shadow-xs';
+            card.className = 'bg-white border border-slate-200 rounded-xl p-3 sm:p-5 shadow-xs';
             card.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                    <h3 class="font-bold text-sm text-slate-800">${sub.title}</h3>
-                    <button class="copy-chart-btn text-xs font-semibold text-[#1a73e8] hover:bg-blue-50 px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition" data-chart="${chartId}">
-                        <svg class="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
-                        <span>Sao chép biểu đồ</span>
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 sm:pb-3 mb-3 sm:mb-4">
+                    <h3 class="font-bold text-xs sm:text-sm text-slate-800 leading-snug">${sub.title}</h3>
+                    <button class="copy-chart-btn text-[11px] sm:text-xs font-semibold text-[#1a73e8] hover:bg-blue-50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg flex items-center space-x-1 sm:space-x-1.5 transition flex-shrink-0" data-chart="${chartId}">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                        <span class="hidden sm:inline">Sao chép biểu đồ</span>
+                        <span class="sm:hidden">Sao chép</span>
                     </button>
                 </div>
-                <div class="relative w-full overflow-x-auto pb-2">
-                    <div style="min-width: ${canvasMinWidth}px; height: 380px;">
+                <div class="block sm:hidden text-[10px] text-purple-600 font-medium mb-1.5 flex items-center space-x-1">
+                    <span>👉 Vuốt ngang để xem các câu hỏi khác</span>
+                </div>
+                <div class="chart-scroll-wrap relative w-full pb-2">
+                    <div style="min-width: ${canvasMinWidth}px; height: ${canvasHeight}px;">
                         <canvas id="${chartId}"></canvas>
                     </div>
                 </div>
@@ -223,27 +230,28 @@ function downloadChartImage(canvas) {
     link.click();
 }
 
-// Demographic charts: Group, Gender (Hidden Class distribution chart per request)
+// Demographic charts: Group, Gender (Optimized for Mobile & Desktop)
 function renderDemographicCards(container, records) {
+    const isMobile = window.innerWidth < 640;
     const card = document.createElement('div');
-    card.className = 'bg-white border border-slate-200 rounded-xl p-5 shadow-xs mb-6';
+    card.className = 'bg-white border border-slate-200 rounded-xl p-3 sm:p-5 shadow-xs mb-4 sm:mb-6';
     card.innerHTML = `
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-            <h3 class="font-bold text-sm text-slate-800">I. THÔNG TIN PHÂN BỐ MẪU KHẢO SÁT</h3>
-            <span class="text-xs text-slate-500 font-medium">${records.length} câu trả lời</span>
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 sm:pb-3 mb-3 sm:mb-4">
+            <h3 class="font-bold text-xs sm:text-sm text-slate-800">I. THÔNG TIN PHÂN BỐ MẪU KHẢO SÁT</h3>
+            <span class="text-[11px] sm:text-xs text-slate-500 font-medium">${records.length} câu trả lời</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-2xl mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 items-center max-w-2xl mx-auto">
             <!-- Group Pie Chart -->
             <div class="flex flex-col items-center">
-                <div class="text-xs font-bold text-slate-700 mb-2">Mã nhóm</div>
-                <div style="height: 200px; width: 100%;">
+                <div class="text-xs font-bold text-slate-700 mb-1.5 sm:mb-2">Mã nhóm</div>
+                <div style="height: 180px; width: 100%;">
                     <canvas id="chart-demo-group"></canvas>
                 </div>
             </div>
             <!-- Gender Pie Chart -->
             <div class="flex flex-col items-center">
-                <div class="text-xs font-bold text-slate-700 mb-2">Giới tính</div>
-                <div style="height: 200px; width: 100%;">
+                <div class="text-xs font-bold text-slate-700 mb-1.5 sm:mb-2">Giới tính</div>
+                <div style="height: 180px; width: 100%;">
                     <canvas id="chart-demo-gender"></canvas>
                 </div>
             </div>
@@ -252,6 +260,8 @@ function renderDemographicCards(container, records) {
     container.appendChild(card);
 
     setTimeout(() => {
+        const legendPos = isMobile ? 'bottom' : 'right';
+
         // Group chart
         const grpCounts = {};
         records.forEach(r => { grpCounts[r.group] = (grpCounts[r.group] || 0) + 1; });
@@ -272,7 +282,7 @@ function renderDemographicCards(container, records) {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        legend: { position: legendPos, labels: { boxWidth: 10, font: { size: 10 } } },
                         tooltip: {
                             callbacks: {
                                 label: ctx => {
@@ -310,7 +320,7 @@ function renderDemographicCards(container, records) {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        legend: { position: legendPos, labels: { boxWidth: 10, font: { size: 10 } } },
                         tooltip: {
                             callbacks: {
                                 label: ctx => {
